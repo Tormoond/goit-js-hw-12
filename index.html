@@ -2,32 +2,40 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./img/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HW JS 12</title>
+    <title>HOMEWORK #11</title>
     <script type="module" crossorigin src="/goit-js-hw-12/commonHelpers.js"></script>
-    <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-0Fq3u7cb.js">
+    <link rel="modulepreload" crossorigin href="/goit-js-hw-12/assets/vendor-DzAH3PXA.js">
     <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/vendor-DumFYO8Z.css">
-    <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/index-Bgvdrstz.css">
+    <link rel="stylesheet" crossorigin href="/goit-js-hw-12/assets/index-D7LMYJJQ.css">
   </head>
   <body>
     <section>
-      <form class="search-form">
+      <form class="search-form" action="">
         <input
-          type="text"
           class="search-input"
-          name="searchField"
+          type="search"
+          name="search"
           placeholder="Search images..."
         />
-        <button type="submit" class="search-btn">Search</button>
+        <button class="button search-button" type="submit">Search</button>
       </form>
     </section>
     <section>
-      <ul class="gallery"></ul>
-      <button type="button" class="load-more-btn visually-hidden">
-        Load More
+      <div data-modal class="loader-thumb">
+        <span class="loader is-hidden"></span>
+      </div>
+
+      <ul class="gallery-list"></ul>
+
+      <button
+        type="button "
+        class="button loadMore-button is-hidden"
+        data-action="load-more"
+      >
+        Load more
       </button>
-      <span class="loader visually-hidden"></span>
     </section>
 
   </body>
