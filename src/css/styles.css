@@ -63,12 +63,12 @@
   border-radius: 8px;
   padding: 8px 16px;
   border: none;
-  background-color: #4e75ff;
+  background-color: #22ad45;
 }
 
 .search-button:hover,
 .search-button:focus {
-  background-color: #6c8cff;
+  background-color: #89be25;
 }
 
 .loadMore-button {
@@ -90,7 +90,7 @@
 }
 
 .loader {
-  color: #4e74ffbc;
+  color: #46e7ecbc;
   font-size: 120px;
   text-indent: -9999em;
   overflow: hidden;
