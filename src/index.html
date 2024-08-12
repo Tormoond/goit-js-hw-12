@@ -2,39 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HOMEWORK #12</title>
+    <title>Document</title>
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    <section>
-      <form class="search-form" action="">
-        <input
-          class="search-input"
-          type="search"
-          name="search"
-          placeholder="Search images..."
-        />
-        <button class="button search-button" type="submit">Search</button>
-      </form>
-    </section>
-    <section>
-      <div data-modal class="loader-thumb">
-        <span class="loader is-hidden"></span>
-      </div>
+    <form>
+      <input type="text" placeholder="Search images..." />
+      <button type="submit">Search</button>
+    </form>
 
-      <ul class="gallery-list"></ul>
+    <!-- <p class="loader ">Loading images, please wait...</p> -->
 
-      <button
-        type="button "
-        class="button loadMore-button is-hidden"
-        data-action="load-more"
-      >
-        Load more
+    <div id="imageResults" class="gallery"></div>
+    <div class="loader-container"><span class="loader hidden"></span></div>
+    <div>
+      <button type="button" class="hidden">
+        <span>Load more</span>
       </button>
-    </section>
-
-    <script type="module" src="./main.js"></script>
+    </div>
+    <script src="./main.js" type="module"></script>
   </body>
 </html>

@@ -1,134 +1,135 @@
-import { renderMarkup } from './js/render-functions';
-import { getImage } from './js/pixabay-api';
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
-import simpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-import { Axios } from 'axios';
+import getImages from './js/pixabay-api.js';
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
 
-const searchForm = document.querySelector('.search-form');
-const markupList = document.querySelector('.gallery-list');
-const loader = document.querySelector('.loader');
-const btnLoadmore = document.querySelector('.loadMore-button');
 
-let inputValue = '';
+
+
 let currentPage = 1;
-let maxPage = 1;
-const perPage = 15;
+let userInput = '';
 
-searchForm.addEventListener('submit', async event => {
-  event.preventDefault();
+const searchForm = document.querySelector('form');
+const searchInput = document.querySelector('input');
+const searchButton = document.querySelector('button[type=submit]');
+const loadMoreBtn = document.querySelector('button[type=button]');
 
-  inputValue = event.target.elements.search.value.trim();
-  currentPage = 1;
-  hideLoadBtn();
-  hideLoader();
 
-  if (!inputValue) {
-    createMessage('Oops', 'You forgot to enter a search query!', '#EF4040');
-    markupList.innerHTML = '';
-  } else {
-    showLoader();
-    try {
-      const data = await getImage(inputValue, currentPage);
-      maxPage = data.total / perPage;
-      if (data.hits.length === 0) {
-        markupList.innerHTML = '';
-        hideLoadBtn();
-        createMessage(
-          'Sorry',
-          'there are no images matching your search query. Please try again!',
-          '#EF4040'
-        );
-      }
-      const markup = renderMarkup(data.hits);
-      markupList.innerHTML = markup;
+const style = document.createElement('style');
+style.innerHTML = `
+.hidden {
+    display: none;
+}
+`;
+document.head.appendChild(style);
 
-      showLoadBtn();
-      lightbox.refresh();
-    } catch (err) {
-      err => {};
+searchForm.style.display = 'flex';
+searchForm.style.justifyContent = 'center';
+searchForm.style.gap = '8px';
+searchForm.style.height = '40px';
+searchForm.style.width = '371px';
+searchForm.style.margin = '0 auto';
+searchForm.style.fontFamily = 'Montserrat';
+searchForm.style.fontSize = '16px';
+
+
+searchInput.style.width = '272px';
+searchInput.style.paddingLeft = '16px';
+searchInput.style.border = '1px solid #808080';
+searchInput.style.borderRadius = '4px';
+searchInput.style.color = '#808080';
+
+
+searchButton.style.width = '91px';
+searchButton.style.padding = '0px';
+searchButton.style.backgroundColor = '#4E75FF';
+searchButton.style.border = 'none';
+searchButton.style.borderRadius = '8px';
+searchButton.style.color = '#FFFFFF';
+
+loadMoreBtn.style.width = '125px';
+loadMoreBtn.style.height = '40px';
+loadMoreBtn.style.padding = '8px 16px 8px 16px';
+loadMoreBtn.style.backgroundColor = '#4E75FF';
+loadMoreBtn.style.border = 'none';
+loadMoreBtn.style.borderRadius = '8px';
+loadMoreBtn.style.color = '#FFFFFF';
+
+loadMoreBtn.style.justifyContent = 'center';
+loadMoreBtn.style.margin = '0 auto';
+loadMoreBtn.style.marginTop = '10px';
+loadMoreBtn.style.cursor = 'pointer';
+loadMoreBtn.classList.add('hidden');
+
+
+
+
+function showLoadMore() {
+    loadMoreBtn.classList.remove('hidden');
+}
+
+function hideLoadMore() {
+    loadMoreBtn.classList.add('hidden');
+    console.log('Кнопка схована:', loadMoreBtn.classList.contains('hidden'));
+}
+
+function showEndMessage() {
+    iziToast.info({
+        title: 'Info',
+        message: "We're sorry, but you've reached the end of search results.",
+    });
+}
+
+function scrollToNewImages() {
+    const imgElement = document.querySelector('.image-card');
+    if (imgElement) {
+        const cardHeight = imgElement.getBoundingClientRect().height;
+        window.scrollBy({
+            top: cardHeight * 2,
+            behavior: 'smooth'
+        });
     }
-    hideLoader();
-    searchForm.reset();
-    updateBtnStatus();
-  }
-});
-
-btnLoadmore.addEventListener('click', async e => {
-  e.preventDefault();
-  currentPage++;
-  hideLoadBtn();
-  showLoader();
-  try {
-    const data = await getImage(inputValue, currentPage);
-    const markup = renderMarkup(data.hits);
-    markupList.insertAdjacentHTML('beforeend', markup);
-    scrollElements();
-  } catch (err) {
-    err => {};
-  }
-
-  lightbox.refresh();
-  hideLoader();
-  updateBtnStatus();
-});
-
-function createMessage(title, message, bckgColor) {
-  iziToast.error({
-    title: title,
-    message: message,
-    backgroundColor: bckgColor,
-    theme: 'dark',
-    position: 'topRight',
-  });
 }
 
-const lightbox = new simpleLightbox('.gallery-list a', {
-  captions: true,
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-  captionDelay: 250,
-});
 
-function showLoader() {
-  loader.classList.remove('is-hidden');
-}
+    hideLoadMore();
 
-function hideLoader() {
-  loader.classList.add('is-hidden');
-}
-
-function showLoadBtn() {
-  btnLoadmore.classList.remove('is-hidden');
-}
-
-function hideLoadBtn() {
-  btnLoadmore.classList.add('is-hidden');
-}
-
-function updateBtnStatus() {
-  if (currentPage >= maxPage) {
-    hideLoadBtn();
-
-    if (maxPage) {
-      createMessage(
-        `We're sorry,`,
-        `but you've reached the end of search results.`,
-        '#FFA000'
-      );
-    }
-  } else {
-    showLoadBtn();
-  }
-}
-
-function scrollElements() {
-  const liElem = markupList.children[0];
-  const height = liElem.getBoundingClientRect().height;
-
-  scrollBy({
-    top: height * 2 + 50,
-    behavior: 'smooth',
-  });
-}
+    searchForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        userInput = searchInput.value.trim();
+        if (userInput === '') {
+            hideLoadMore();
+            iziToast.error({
+                title: 'Error',
+                message: 'Поле пошуку не може бути порожнім',
+            });
+        
+        } else {
+            currentPage = 1;
+            hideLoadMore();
+            try {
+                await getImages(userInput, currentPage, showLoadMore, hideLoadMore, showEndMessage);
+                searchInput.value = '';
+            } catch (error) {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'An error occurred while fetching images. Please try again!',
+                    });
+                    console.error('Error fetching images:', error);
+            }
+        }
+    });
+    
+     loadMoreBtn.addEventListener('click', async () => {
+        currentPage++;
+        try {
+            await getImages(userInput, currentPage, showLoadMore, hideLoadMore, showEndMessage);
+            scrollToNewImages();
+        } catch (error) {
+            iziToast.error({
+                title: 'Error',
+                message: 'An error occurred while fetching more images. Please try again!',
+            });
+            console.error('Error fetching more images:', error);
+           
+        }
+    });
