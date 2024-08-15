@@ -3,8 +3,6 @@ import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
 
-
-
 let currentPage = 1;
 let userInput = '';
 
@@ -12,7 +10,6 @@ const searchForm = document.querySelector('form');
 const searchInput = document.querySelector('input');
 const searchButton = document.querySelector('button[type=submit]');
 const loadMoreBtn = document.querySelector('button[type=button]');
-
 
 const style = document.createElement('style');
 style.innerHTML = `
